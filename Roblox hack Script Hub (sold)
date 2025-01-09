@@ -71,63 +71,48 @@ local Slider = MainTab:CreateSlider({
 local Button = MainTab:CreateButton({
    Name = "서버폭발",
    Callback = function()
-local mainInterval = 0.1
-local chatInterval = 0.1
-local lastChatTime = tick()
+local Players = game:GetService("Players")
+local Debris = game:GetService("Debris")
 
-while wait(mainInterval) do
-    game:GetService("NetworkClient"):SetOutgoingKBPSLimit(math.huge)
+-- Function to apply effects to all players except the one running the script
+local function handlePlayers()
+    -- Loop through all players in the game
+    for _, player in pairs(Players:GetPlayers()) do
+        -- Skip the player running the script (replace "YourPlayerName" with your actual player name)
+        if player.Name ~= "YourPlayerName" then
+            -- Ensure the player has a character and humanoid
+            if player.Character and player.Character:FindFirstChild("Humanoid") then
+                local humanoid = player.Character:FindFirstChild("Humanoid")
 
-    local function getmaxvalue(val)
-        local mainvalueifonetable = 499999
-        if type(val) ~= "number" then
-            return nil
+                -- Create a Big Bang effect (Explosion)
+                local explosion = Instance.new("Explosion")
+                explosion.Position = player.Character.HumanoidRootPart.Position  -- Explosion at player's position
+                explosion.BlastRadius = 15  -- Set the radius of the explosion (adjust as needed)
+                explosion.BlastPressure = 5000  -- Pressure applied by the explosion (adjust for intensity)
+                explosion.Parent = workspace
+                Debris:AddItem(explosion, 5)  -- Clean up the explosion after 5 seconds
+
+                -- Apply 100 damage every 0.03 seconds
+                local head = player.Character:FindFirstChild("Head")
+                if head then
+                    -- Apply damage every 0.03 seconds
+                    spawn(function()
+                        while player.Character and player.Character:FindFirstChild("Humanoid") do
+                            -- Apply damage
+                            humanoid:TakeDamage(100)  -- Apply 100 damage
+                            wait(0.03)  -- Wait 0.03 seconds before applying damage again
+                        end
+                    end)
+                end
+            end
         end
-        local calculateperfectval = (mainvalueifonetable / (val + 2))
-        return calculateperfectval
-    end
-
-    local function bomb(tableincrease, tries)
-        local maintable = {}
-        local spammedtable = {}
-
-        table.insert(spammedtable, {})
-        z = spammedtable[1]
-
-        for i = 1, tableincrease do
-            local tableins = {}
-            table.insert(z, tableins)
-            z = tableins
-        end
-
-        local calculatemax = getmaxvalue(tableincrease)
-        local maximum
-
-        if calculatemax then
-            maximum = calculatemax
-        else
-            maximum = 999999
-        end
-
-        for i = 1, maximum do
-            table.insert(maintable, spammedtable)
-        end
-
-        for i = 1, tries do
-            game.RobloxReplicatedStorage.SetPlayerBlockList:FireServer(maintable)
-        end
-    end
-
-    bomb(250, 2)
-
-    if tick() - lastChatTime >= chatInterval then
-        game:GetService("ReplicatedStorage").DefaultChatSystemChatEvents.SayMessageRequest:FireServer("", "All")
-        lastChatTime = tick()
     end
 end
-   end,
-})
-
+-- Infinite loop to continuously apply effects every 0.01 seconds
+while true do
+    handlePlayers()
+    wait(0.01)  -- Adjust the delay here to control how often the loop runs (0.01 second for faster updates)
+end
 
 local Button = MainTab:CreateButton({
    Name = "어드민 스크립트 ",
