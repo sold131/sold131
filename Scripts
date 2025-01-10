@@ -42,6 +42,7 @@ Rayfield:Notify({
 })
 
 local MainTab = Window:CreateTab("🌍메인 탭🌍", 4483362458) -- Title, Image
+
 local MainSection = MainTab:CreateSection("Speed Jump Power")
 
 local Slider = MainTab:CreateSlider({
