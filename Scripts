@@ -879,15 +879,6 @@ end
 local Tab = Window:CreateTab("프리즌 라이프  ", nil) -- Title, Image
 
 local Button = Tab:CreateButton({
-   Name = "aK47 가져가기 ",
-   Callback = function()
-local args = {
-    [1] = workspace:WaitForChild("Prison_ITEMS"):WaitForChild("giver"):WaitForChild("AK-47"):WaitForChild("ITEMPICKUP")
-}
-
-workspace:WaitForChild("Remote"):WaitForChild("ItemHandler"):InvokeServer(unpack(args)) 
-
-local Button = Tab:CreateButton({
    Name = "오토에임 (킬아우라) ",
    Callback = function()
 mainRemotes = game.ReplicatedStorage
