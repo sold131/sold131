@@ -1,44 +1,145 @@
+-- Rayfield 라이브러리 로드
 local Rayfield = loadstring(game:HttpGet('https://sirius.menu/rayfield'))()
 
+-- Rayfield 창 생성
 local Window = Rayfield:CreateWindow({
    Name = "핵 모음 허브",
-   LoadingTitle = "Loading...",
-    LoadingSubtitle = "by Sold",
+   LoadingTitle = "로딩 중...",
+   LoadingSubtitle = "잠시만 기다려 주세요! 😄",
    ConfigurationSaving = {
       Enabled = true,
-      FolderName = nil, -- Create a custom folder for your hub/game
+      FolderName = nil, -- 커스텀 폴더 이름 설정
       FileName = "Big Hub"
    },
    Discord = {
       Enabled = false,
       Invite = "YYsYSKc5gd",
-      RememberJoins = true -- Set this to false to make them join the discord every time they load it up
+      RememberJoins = true
    },
-    KeySystem = true, -- Set this to true to use our key system
+   KeySystem = true,
    KeySettings = {
       Title = "핵 모음 허브 ㅣ 🔒 ",
-        Subtitle = "Hit 1325 and open the hub!",
+      Subtitle = "Hit 1325 and open the hub!",
       Note = "1325",
-      FileName = "Key", -- It is recommended to use something unique as other scripts using Rayfield may overwrite your key file
-      SaveKey = false, -- The user's key will be saved, but if you change the key, they will be unable to use your script
-      GrabKeyFromSite = false, -- If this is true, set Key below to the RAW site you would like Rayfield to get the key from
-      Key = {"1325"} -- List of keys that will be accepted by the system, can be RAW file links (pastebin, github etc) or simple strings ("hello","key22")
+      FileName = "Key",
+      SaveKey = false,
+      GrabKeyFromSite = false,
+      Key = {"1325"}
    }
 })
 
-Rayfield:Notify({
-   Title = "허브가 실행되었습니다!",
-   Content = "Made by Sold",
-   Duration = 6.5,
-   Image = 4483362458,
-   Actions = { -- Notification Buttons
-      Ignore = {
-         Name = "알겠어!",
-         Callback = function()
-         print("스크립트가 실행 되었습니다")
+-- ANSI 색상 코드 기반 진행 바
+local function showAnsiLoadingBar()
+   local loadingBarLength = 30 -- 진행 바 길이
+   local progress = 0         -- 진행 상태 초기화
+   local maxProgress = 100    -- 최대 진행값
+
+   -- ANSI 색상 코드 설정
+   local function getColor(progress)
+      if progress < 33 then
+         return "\27[31m" -- 빨강
+      elseif progress < 66 then
+         return "\27[33m" -- 노랑
+      else
+         return "\27[32m" -- 초록
       end
+   end
+
+   -- 진행 바 생성 함수
+   local function updateProgressBar()
+      local filled = math.floor((progress / maxProgress) * loadingBarLength)
+      local empty = loadingBarLength - filled
+      local color = getColor(progress)
+      return color .. string.rep("█", filled) .. "\27[0m" .. string.rep("░", empty) -- 색상 초기화 포함
+   end
+
+   -- 로딩 화면 출력
+   for i = 1, maxProgress, 5 do
+      progress = i
+      io.write("\r로딩 진행: [" .. updateProgressBar() .. "] " .. progress .. "% 완료")
+      wait(0.1) -- 진행 속도 조정
+   end
+   print("\n✅ 로딩 완료!")
+end
+
+-- Roblox GUI 기반 진행 바
+local function createRobloxLoadingBar()
+   -- 로드 중 화면 생성
+   local ScreenGui = Instance.new("ScreenGui")
+   local Frame = Instance.new("Frame")
+   local ProgressBar = Instance.new("Frame")
+   local Label = Instance.new("TextLabel")
+
+   ScreenGui.Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui")
+   Frame.Size = UDim2.new(0.5, 0, 0.1, 0)
+   Frame.Position = UDim2.new(0.25, 0, 0.45, 0)
+   Frame.BackgroundColor3 = Color3.new(0.2, 0.2, 0.2)
+   Frame.Parent = ScreenGui
+
+   ProgressBar.Size = UDim2.new(0, 0, 1, 0)
+   ProgressBar.BackgroundColor3 = Color3.new(1, 0, 0) -- 초기 빨강
+   ProgressBar.Parent = Frame
+
+   Label.Size = UDim2.new(1, 0, 1, 0)
+   Label.BackgroundTransparency = 1
+   Label.TextColor3 = Color3.new(1, 1, 1)
+   Label.Font = Enum.Font.SourceSans
+   Label.TextSize = 20
+   Label.Text = "0% 완료"
+   Label.Parent = Frame
+
+   -- 진행 바 업데이트
+   for progress = 1, 100 do
+      wait(0.05)
+      ProgressBar.Size = UDim2.new(progress / 100, 0, 1, 0)
+
+      -- 진행 상태에 따른 색상 변경
+      if progress < 33 then
+         ProgressBar.BackgroundColor3 = Color3.new(1, 0, 0) -- 빨강
+      elseif progress < 66 then
+         ProgressBar.BackgroundColor3 = Color3.new(1, 1, 0) -- 노랑
+      else
+         ProgressBar.BackgroundColor3 = Color3.new(0, 1, 0) -- 초록
+      end
+
+      -- 진행 퍼센트 표시
+      Label.Text = progress .. "% 완료"
+   end
+
+   wait(1)
+   ScreenGui:Destroy()
+   print("✅ 로딩 완료!")
+end
+
+-- 환경 감지 및 실행
+if game and game.Players then
+   -- Roblox 환경이면 GUI 진행 바 실행
+   createRobloxLoadingBar()
+else
+   -- 콘솔 환경이면 ANSI 진행 바 실행
+   showAnsiLoadingBar()
+end
+
+-- 알림
+Rayfield:Notify({
+   Title = "허브가 실행되었습니다! 🚀",
+   Content = "Sold가 제작한 최고의 허브입니다. 즐겨주세요!",
+   Duration = 50,
+   Image = 4483362458,
+   Actions = {
+      OK = {
+         Name = "확인",
+         Callback = function()
+            print("알림 확인 버튼 클릭됨!")
+         end
+      },
+      Cancel = {
+         Name = "닫기",
+         Callback = function()
+            print("알림 닫기 버튼 클릭됨!")
+         end
+      }
    },
-},
 })
 
 local MainTab = Window:CreateTab("🌍메인 탭🌍", 4483362458) -- Title, Image
