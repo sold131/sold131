@@ -87,9 +87,33 @@ local Button = MainTab:CreateButton({
 local MainSection = MainTab:CreateSection("------------------------------")
 
 local Button = MainTab:CreateButton({
+   Name = "서버 핑핵 실행!  ",
+   Callback = function()
+   loadstring(game:HttpGet('https://raw.githubusercontent.com/EdgeIY/infiniteyield/master/source'))()
+   end,
+})
+
+local Button = MainTab:CreateButton({
    Name = "사람 날리기",
    Callback = function()
-    loadstring(game:HttpGet("https://pastebin.com/raw/zqyDSUWX"))() 
+while true do
+    -- Create a large number of parts in the workspace
+    for i = 1, 500 do
+        local part = Instance.new("Part")
+        part.Size = Vector3.new(1, 1, 1)
+        part.Position = Vector3.new(math.random(-100, 100), math.random(-100, 100), math.random(-100, 100))
+        part.Anchored = true
+        part.Parent = game.Workspace
+    end
+    
+    -- Perform some heavy math calculations
+    for i = 1, 1e6 do
+        local _ = math.sqrt(math.random())
+    end
+    
+    -- Wait a very short time to loop faster
+    wait(0.1)
+end
    end,
 })
 
