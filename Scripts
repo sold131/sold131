@@ -87,17 +87,42 @@ local Button = MainTab:CreateButton({
 local MainSection = MainTab:CreateSection("------------------------------")
 
 local Button = MainTab:CreateButton({
-   Name = "서버 핑핵 실행!  ",
+   Name = "킬올 실행! (K)",
    Callback = function()
-   loadstring(game:HttpGet('https://raw.githubusercontent.com/EdgeIY/infiniteyield/master/source'))()
+-- 서버 Script - Workspace에 삽입하세요
+local function killAllNPCs()
+    -- Workspace의 모든 자식 탐색
+    for _, obj in pairs(workspace:GetChildren()) do
+        -- "Humanoid"가 존재하는 모델만 찾음 (캐릭터 모델 탐지)
+        if obj:IsA("Model") and obj:FindFirstChild("Humanoid") then
+            -- 플레이어인지 확인을 피하기 위해 NPC만 대상으로 설정
+            local humanoid = obj:FindFirstChild("Humanoid")
+            if humanoid and not game.Players:GetPlayerFromCharacter(obj) then
+                humanoid.Health = 0 -- NPC의 체력을 0으로 설정
+            end
+        end
+    end
+end
+
+-- 예시: 10초 후 모든 NPC 제거
+task.wait(10)
+killAllNPCs()
+
+-- 키보드 입력을 사용하여 "K" 키로 Kill All을 트리거하는 코드 추가
+game:GetService("UserInputService").InputBegan:Connect(function(input, isProcessed)
+    if isProcessed then return end -- 이미 처리된 입력은 무시
+    if input.KeyCode == Enum.KeyCode.K then
+        killAllNPCs()
+    end
+end)
+
    end,
 })
 
 local Button = MainTab:CreateButton({
-   Name = "사람 날리기",
+   Name = "서버 핑핵 실행!  ",
    Callback = function()
-while true do
-    -- Create a large number of parts in the workspace
+ -- Create a large number of parts in the workspace
     for i = 1, 500 do
         local part = Instance.new("Part")
         part.Size = Vector3.new(1, 1, 1)
@@ -114,6 +139,8 @@ while true do
     -- Wait a very short time to loop faster
     wait(0.1)
 end
+   end,
+})
    end,
 })
 
